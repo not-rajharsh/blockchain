@@ -35,7 +35,7 @@ def mine_block(block, difficulty):
     return block
 
 def is_chain_valid(blockchain):
-    for i in range(len(blockchain)):
+    for i in range(1, len(blockchain)):
         current_block = blockchain[i]
         previous_block = blockchain[i-1]
 
@@ -43,7 +43,7 @@ def is_chain_valid(blockchain):
             print(f"Tampering detected! Hash mismatch at Block #{current_block['index']}")
             return False
 
-        if current_block['prev_hash'] != previous_block['hash']:
+        if i > 0 and current_block['prev_hash'] != previous_block['hash']:
             print(f"Broken chain! Invalid previous hash at Block #{current_block['index']}")
             return False
     return True
@@ -70,36 +70,42 @@ if __name__ == "__main__":
         print("3. Verify chain validity")
         print("4. Mine Blocks")
         print()
-        ch = int(input("Enter Your Choice:"))
-        if ch == 1:
+        try:
+            ch = int(input("Enter Your Choice:"))
+            if ch == 1:
 
-            sender = input("Enter sender name: ")
-            recipient = input("Enter recipient name: ")
-            amount = float(input("Enter amount to transfer: "))
+                sender = input("Enter sender name: ")
+                recipient = input("Enter recipient name: ")
+                amount = float(input("Enter amount to transfer: "))
 
-            pending_transactions.append({"sender": sender, "recipient": recipient, "amount": amount})
+                pending_transactions.append({"sender": sender, "recipient": recipient, "amount": amount})
 
 
-        elif ch == 2:
-            for i in range(len(blockchain)):
-                print()
-                print("Block-",i+1)
-                print("Index -", blockchain[i].get("index"))
-                print("Timestamp -", blockchain[i].get("timestamp"))
-                print("Data -", blockchain[i].get("data"))
-                print("Previous Hash -", blockchain[i].get("prev_hash"))
-                print("Nonce -", blockchain[i].get("nonce"))
-                print("Hash -", blockchain[i].get("hash"))
-                print("-"*50)
+            elif ch == 2:
+                for i in range(len(blockchain)):
+                    print()
+                    print("Block-",i+1)
+                    print("Index -", blockchain[i].get("index"))
+                    print("Timestamp -", blockchain[i].get("timestamp"))
+                    print("Data -", blockchain[i].get("data"))
+                    print("Previous Hash -", blockchain[i].get("prev_hash"))
+                    print("Nonce -", blockchain[i].get("nonce"))
+                    print("Hash -", blockchain[i].get("hash"))
+                    print("-"*50)
 
-        elif ch == 3:
-            if is_chain_valid(blockchain):
-                print("The Chain is Vaild")
+            elif ch == 3:
+                if is_chain_valid(blockchain):
+                    print("The Chain is Vaild")
 
-        elif ch == 4:
-            for i in pending_transactions:
-                last_hash = blockchain[-1]["hash"]
-                new_block = create_block(i, last_hash, len(blockchain))
-                mined_block = mine_block(new_block, difficulty)
-                blockchain.append(mined_block)
-            pending_transactions = []
+            elif ch == 4:
+                if len(pending_transactions) > 0:
+                    last_hash = blockchain[-1]["hash"]
+                    new_block = create_block(pending_transactions, last_hash, len(blockchain))
+                    mined_block = mine_block(new_block, difficulty)
+                    blockchain.append(mined_block)
+                    pending_transactions = []
+                else:
+                    print("No pending transaction to mine!")
+
+        except ValueError:
+            print("Please Enter A Integer Value:")
