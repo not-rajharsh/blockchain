@@ -35,7 +35,7 @@ def mine_block(block, difficulty):
     return block
 
 def is_chain_valid(blockchain):
-    for i in range(1, len(blockchain)):
+    for i in range(len(blockchain)):
         current_block = blockchain[i]
         previous_block = blockchain[i-1]
 
@@ -60,7 +60,7 @@ if __name__ == "__main__":
     print("=" * 50)
 
     print("Creating Genesis Block...")
-    genesis_block = create_block("Genesis Bock Data", "0", 0, difficulty)
+    genesis_block = create_block("Genesis Bock Data", "0", 0)
     blockchain.append(genesis_block)
 
     while True:
@@ -99,7 +99,7 @@ if __name__ == "__main__":
         elif ch == 4:
             for i in pending_transactions:
                 last_hash = blockchain[-1]["hash"]
-                new_block = create_block(i, last_hash, len(blockchain), difficulty)
+                new_block = create_block(i, last_hash, len(blockchain))
                 mined_block = mine_block(new_block, difficulty)
                 blockchain.append(mined_block)
             pending_transactions = []
