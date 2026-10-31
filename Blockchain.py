@@ -27,7 +27,7 @@ def mine_block(block, difficulty):
 
     while not block['hash'].startswith(target):
         block['nonce'] += 1
-        print(calculate_hash(block))
+        #print(calculate_hash(block))
         block['hash'] = calculate_hash(block)
 
     print(calculate_hash(block), "MINED")
@@ -59,6 +59,9 @@ if __name__ == "__main__":
     print("WELCOME TO MY CRYPTOCURRENCY!")
     print("=" * 50)
 
+    print("Creating Genesis Block...")
+    genesis_block = create_block("Genesis Bock Data", "0", 0, difficulty)
+    blockchain.append(genesis_block)
 
     while True:
         print()
@@ -69,9 +72,6 @@ if __name__ == "__main__":
         print()
         ch = int(input("Enter Your Choice:"))
         if ch == 1:
-            print("Creating Genesis Block...")
-            genesis_block = create_block("Genesis Bock Data", "0", 0, difficulty)
-            blockchain.append(genesis_block)
 
             sender = input("Enter sender name: ")
             recipient = input("Enter recipient name: ")
