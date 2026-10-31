@@ -9,7 +9,7 @@ def calculate_hash(block):
 
     return hashlib.sha256(block_string).hexdigest()
 
-def create_block(data, prev_hash, index, difficulty=2):
+def create_block(data, prev_hash, index):
     timestamp = time.time()
     block = {
         'index':index,
@@ -20,7 +20,7 @@ def create_block(data, prev_hash, index, difficulty=2):
         'hash':''
     }
     block['hash'] = calculate_hash(block)
-    return mine_block(block, difficulty)
+    return block
 
 def mine_block(block, difficulty):
     target = "0" * difficulty
@@ -100,5 +100,6 @@ if __name__ == "__main__":
             for i in pending_transactions:
                 last_hash = blockchain[-1]["hash"]
                 new_block = create_block(i, last_hash, len(blockchain), difficulty)
-
                 mined_block = mine_block(new_block, difficulty)
+                blockchain.append(mined_block)
+            pending_transactions = []
